@@ -1,6 +1,7 @@
 import { expect } from '@playwright/test';
 import type { APIRequestContext } from '@playwright/test';
-import type { ApiUserRegistration, ApiUserResponse } from '@_src/api/models/user.api.model';
+import type { ApiUserLogin, ApiUserRegistration, ApiUserResponse } from '@_src/api/models/user.api.model';
+import { APP_API_URL } from '@_config/env.config';
 
 export async function apiCreateUser(
 	request: APIRequestContext,
@@ -11,8 +12,7 @@ export async function apiCreateUser(
 		data: payload,
 		headers: {
 			Accept: 'application/json, text/plain, */*',
-			'Content-Type': 'application/json',
-			Referer: `${process.env.APP_API_URL}/`
+			'Content-Type': 'application/json'
 		},	
 	});
 
@@ -22,6 +22,27 @@ export async function apiCreateUser(
 		throw new Error(`apiCreateUser failed: ${response.status()} ${response.statusText()} - ${bodyText}`);
 	}
 	expect(response.status()).toBe(201);
+	return (await response.json()) as ApiUserResponse;
+}
+
+export async function apiLoginUser(
+	request: APIRequestContext,
+	baseApiUrl: string,
+	payload: ApiUserLogin
+): Promise<ApiUserResponse> {
+	const response = await request.post(`${baseApiUrl}/api/users/login`, {
+		data: payload,
+		headers: {
+			Accept: 'application/json, text/plain, */*',
+			'Content-Type': 'application/json'
+		}
+	});
+
+	if (!response.ok()) {
+		const bodyText = await response.text();
+		throw new Error(`apiLoginUser failed: ${response.status()} ${response.statusText()} - ${bodyText}`);
+	}
+	expect(response.status()).toBe(200);
 	return (await response.json()) as ApiUserResponse;
 }
 

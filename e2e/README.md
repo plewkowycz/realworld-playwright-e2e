@@ -82,13 +82,47 @@ If the upstream landing page content changes, adjust the assertions in `e2e/test
 ### Test design (Page Objects + AAA)
 
 - Page Object pattern:
-  - Location for page objects: `e2e/src/pages/`
+  - Location for page objects: `e2e/src/ui/pages/`
   - Puts the selectors and actions in one place so tests stay easy to read and change.
   - Selectors and roles: we try to use Playwright’s role-based selectors (e.g., `getByRole`) as recommended. Where that isn’t possible due to missing accessibility roles or stable attributes, we fall back to other selectors. Future improvement: add better roles or `data-test` attributes in the app to make selectors more robust.
 - AAA (Arrange–Act–Assert) convention in tests:
   - Arrange: prepare test data and state (e.g., navigate, log in).
   - Act: perform the user action (e.g., create article, add comment).
   - Assert: verify expected UI/API outcomes.
+
+### Source layout (@src)
+
+The E2E sources live under `e2e/src` and are split by responsibility:
+
+- `e2e/src/api/` — API-layer helpers and types used by tests
+  - `factories/` — data factories for API payloads (e.g., `user.factory.ts`)
+  - `models/` — API models/types (e.g., `user.api.model.ts`)
+  - `utilis/` — small API utilities (e.g., `users.ts`)
+- `e2e/src/ui/` — UI-layer (Page Objects + supporting test helpers)
+  - `pages/` — Page Objects for major screens (e.g., `home.page.ts`, `login.page.ts`, `article.page.ts`, `profile.page.ts`, `register.page.ts`)
+  - `components/` — reusable UI fragments used by pages (e.g., `header.component.ts`)
+  - `fixtures/` — Playwright fixtures that provide typed Page Objects to tests (e.g., `page-object.fixture.ts`, `merge.fixture.ts`)
+  - `factories/` — UI-focused factories for view models/test data
+  - `models/` — UI/view-layer models
+
+Why this split?
+- **api**: keep API payload building and types isolated so tests can seed/verify data cleanly.
+- **ui**: centralize selectors and user actions in Page Objects to keep specs readable and resilient to UI changes.
+
+### How tests use @ui today
+
+- Tests live in `e2e/tests/*.spec.ts` and import the custom fixtures from `e2e/src/ui/fixtures/`.
+- Specs follow AAA:
+  - Arrange with factories and navigate using a Page Object (e.g., `HomePage`).
+  - Act by calling Page Object methods (e.g., `login`, `createArticle`, `addComment`).
+  - Assert via page getters/locators exposed by the Page Objects.
+
+### Adding a new test quickly
+
+1. Create or extend a Page Object in `e2e/src/ui/pages/` and prefer `getByRole` selectors.
+2. If a reusable fragment emerges, factor it into `e2e/src/ui/components/`.
+3. Expose the Page Object via `e2e/src/ui/fixtures/page-object.fixture.ts` so specs can use it directly.
+4. Write the spec under `e2e/tests/`, using AAA and the provided fixtures.
 
 ### CI
 

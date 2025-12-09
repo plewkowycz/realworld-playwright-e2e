@@ -16,4 +16,11 @@ export interface ApiUserResponse {
 	};
 }
 
+export interface ApiUserLogin {
+	user: {
+		email: string;
+		password: string;
+	};
+}
+
 
