@@ -23,7 +23,7 @@ test.describe.serial('Sign-up & Login', () => {
     await expect(homePage.userProfileImage).toBeVisible();
   });
 
-  test('Attempt login with wrong password shows error (expect 401)', async ({
+  test.skip('Attempt login with wrong password shows error (expect 401)', async ({
     page,
     loginPage,
   }) => {

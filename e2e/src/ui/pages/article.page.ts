@@ -68,16 +68,14 @@ export class ArticlePage {
     await this.titleInput.fill(title);
     await this.descriptionInput.fill(description);
     await this.bodyInput.fill(body);
-    for (const tag of tags) {
-      await this.tagsInput.fill(tag);
-      await this.tagsInput.press('Enter');
-    }
+    await this.addTags(tags);
   }
 
   async addTags(tags: string[]): Promise<void> {
     for (const tag of tags) {
       await this.tagsInput.fill(tag);
       await this.tagsInput.press('Enter');
+      await this.page.locator('.tag-pill').filter({ hasText: tag }).waitFor({ state: 'visible' });
     }
   }
 
