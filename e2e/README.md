@@ -16,17 +16,23 @@ This folder contains the Playwright E2E test harness, isolated Node dependencies
 ### Environment
 
 Required:
-- `APP_BASE_URL` – Base URL of the running frontend.
-  - Local host runs: `http://localhost:4200`
-  - When running dockerized tests on macOS/Windows/Linux: `http://host.docker.internal:4200`
-- `APP_API_URL` – Base URL of the backend API (Django REST).
-  - Local host runs: `http://localhost:8000`
-  - When running dockerized tests on macOS/Windows/Linux: `http://host.docker.internal:8000`
+- `APP_BASE_URL` – Base URL of the running frontend: `http://localhost:4200`
+- `APP_API_URL` – Base URL of the backend API (Django REST): `http://localhost:8000`
+
+These URLs work for both local and dockerized test runs because:
+- The app exposes ports `4200` and `8000` to localhost via `app/docker-compose.yml`
+- The test container uses `network_mode: host` to access localhost directly
 
 Create your `.env` from the example:
 
 ```bash
 cp .env.example .env
+```
+
+Your `.env` should contain:
+```
+APP_BASE_URL=http://localhost:4200
+APP_API_URL=http://localhost:8000
 ```
 
 Backend login error code note:
@@ -65,12 +71,33 @@ npm run test:e2e:headed
 
 ### Run tests inside Docker (Linux container)
 
+**Step-by-step (recommended for understanding):**
+
 ```bash
-# From repo root (no cd)
+# From repo root
+
+# 1) Start the app (frontend + backend in Docker)
+docker compose -f app/docker-compose.yml up -d
+
+# 2) Run tests in Playwright container
+cd e2e && docker compose run --rm tests
+
+# 3) Tear down the app when finished
+cd .. && docker compose -f app/docker-compose.yml down -v
+```
+
+**Or use the npm script (all-in-one):**
+
+```bash
+# From repo root
 npm --prefix e2e run test:e2e:docker
 ```
 
-Tip: For dockerized tests, set `APP_BASE_URL=http://host.docker.internal:4200` in `e2e/.env`.
+**How it works:**
+- The `e2e/docker-compose.yml` defines a `tests` service using the official Playwright image (`mcr.microsoft.com/playwright:v1.57.0-jammy`)
+- The test container uses `network_mode: host` to access `localhost:4200` and `localhost:8000` (the ports exposed by the app containers)
+- This approach avoids Docker internal networking complexity and works reliably across macOS, Windows, and Linux
+- Recommended Playwright flags (`--ipc=host`, `--init`) are configured for stability
 
 ### Test scenarios
 

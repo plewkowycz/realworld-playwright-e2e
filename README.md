@@ -73,7 +73,8 @@ cp .env.example .env
 ```
 
 Available variables:
-- `APP_BASE_URL` (required; recommended `http://host.docker.internal:4200` when running dockerized tests)
+- `APP_BASE_URL` (required; use `http://localhost:4200` for both local and dockerized tests)
+- `APP_API_URL` (required; use `http://localhost:8000` for both local and dockerized tests)
 - Credentials (configure in `e2e/.env`):
   ```
   # Demo credentials for registration (optional; for future tests)
@@ -113,21 +114,42 @@ npm --prefix e2e run test:e2e
 
 ### Run everything with Docker (app + Dockerized Playwright)
 
-If you want the tests to run inside a Linux Docker container as well:
+Both the application and tests can run entirely in Docker containers:
+
 ```bash
 # From repo root
+
 # 1) Ensure app is cloned
 git clone https://github.com/NemTam/realworld-django-rest-framework-angular app || true
 
-# 2) Run dockerized Playwright tests (this starts the app, waits, runs tests, then tears down)
+# 2) Start the application stack (frontend + backend in Docker)
+docker compose -f app/docker-compose.yml up -d
+
+# 3) Run Playwright tests inside a Docker container
+cd e2e && docker compose run --rm tests
+
+# 4) Tear down the app when finished
+docker compose -f app/docker-compose.yml down -v
+```
+
+Or use the npm script (does all steps automatically):
+```bash
 npm --prefix e2e run test:e2e:docker
 ```
-Notes:
-- `APP_BASE_URL` is required. For dockerized tests on macOS/Windows/Linux, set it to `http://host.docker.internal:4200` in `e2e/.env`.
-- The `e2e/docker-compose.yml` defines only the `tests` service (official Playwright image). The application stack is started/stopped using `app/docker-compose.yml` directly to avoid cross‑compose complexity.
 
-Linux (Docker) note:
-- The steps above already use Docker Compose for the application and run Playwright headless by default, so they work on Linux.
+**How it works:**
+- The app runs in Docker via `app/docker-compose.yml`, exposing ports `4200` (frontend) and `8000` (backend) to localhost
+- The test container uses `network_mode: host` to access `localhost:4200` and `localhost:8000` directly
+- This avoids Docker internal networking complexity and works reliably on macOS, Windows, and Linux
+
+**Environment setup for Docker:**
+```bash
+# e2e/.env should contain:
+APP_BASE_URL=http://localhost:4200
+APP_API_URL=http://localhost:8000
+```
+
+Linux note:
 - On Linux desktops/servers you may prefer installing browsers with OS deps once using:
   ```bash
   cd e2e

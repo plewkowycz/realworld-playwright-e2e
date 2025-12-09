@@ -1,27 +1,27 @@
-version: "3.8"
+# E2E Test Runner for Playwright
+# Usage:
+#   1. Start the app first: docker compose -f app/docker-compose.yml up -d
+#   2. Run tests: docker compose run --rm tests
+#   3. Stop app: docker compose -f app/docker-compose.yml down -v
 
 services:
   tests:
-    image: mcr.microsoft.com/playwright:v1.48.0-jammy
+    image: mcr.microsoft.com/playwright:v1.57.0-jammy
     working_dir: /work
     volumes:
       - .:/work
-    env_file:
-      - e2e/.env
-    # Ensure host.docker.internal resolves on Linux
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - ./test-results:/work/test-results
+      - ./playwright-report:/work/playwright-report
+    environment:
+      - APP_BASE_URL=http://localhost:4200
+      - APP_API_URL=http://localhost:8000
+    # Use host network to access app running on localhost
+    network_mode: host
+    # Recommended flags for Playwright in Docker
+    ipc: host
+    init: true
     command: >
-      bash -lc '
-      : "${APP_BASE_URL:?APP_BASE_URL is required in e2e/.env}";
-      URL="${APP_BASE_URL}";
-      for i in {1..300}; do
-        if curl -sf "$URL/" >/dev/null; then break; fi
-        sleep 2;
-      done;
-      npm install;
-      npx playwright install --with-deps;
-      npx playwright test;
-      '
-
-
+      bash -lc "
+      npm ci &&
+      npx playwright test --reporter=list
+      "
