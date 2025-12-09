@@ -108,12 +108,12 @@ npm --prefix e2e run test:e2e:docker
 
 After running tests, Playwright generates several artifacts to help debug failures:
 
-| Artifact | Location | When Generated |
-|----------|----------|----------------|
-| HTML Report | `playwright-report/` | Always |
-| Screenshots | `test-results/<test-name>/` | On failure |
-| Videos | `test-results/<test-name>/` | On failure |
-| Traces | `test-results/<test-name>/` | On failure |
+| Artifact    | Location                    | When Generated |
+| ----------- | --------------------------- | -------------- |
+| HTML Report | `playwright-report/`        | Always         |
+| Screenshots | `test-results/<test-name>/` | On failure     |
+| Videos      | `test-results/<test-name>/` | On failure     |
+| Traces      | `test-results/<test-name>/` | On failure     |
 
 **Step 1: Open the HTML report**
 
@@ -123,6 +123,7 @@ npx playwright show-report
 ```
 
 This opens an interactive HTML report in your browser showing:
+
 - Test results summary (passed/failed/skipped)
 - Each test with its steps, duration, and errors
 - Links to screenshots, videos, and traces for failed tests
@@ -130,6 +131,7 @@ This opens an interactive HTML report in your browser showing:
 **Step 2: View traces for failed tests**
 
 Traces provide a detailed timeline of test execution including:
+
 - DOM snapshots at each action
 - Network requests
 - Console logs
