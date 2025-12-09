@@ -1,5 +1,3 @@
-import { APP_API_URL } from '@_config/env.config';
-
 import type {
   ApiUserLogin,
   ApiUserRegistration,

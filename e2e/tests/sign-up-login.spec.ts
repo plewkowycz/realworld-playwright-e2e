@@ -5,11 +5,7 @@ import { expect, test } from '@_src/ui/fixtures/merge.fixture';
 test.describe.serial('Sign-up & Login', () => {
   const user = buildUser();
 
-  test('Register a new user and log in successfully', async ({
-    registerPage,
-    loginPage,
-    homePage,
-  }) => {
+  test('Register a new user and log in successfully', async ({ registerPage, loginPage }) => {
     await registerPage.goto();
     await expect(registerPage.heading).toBeVisible();
     await registerPage.register(user.username, user.email, user.password);

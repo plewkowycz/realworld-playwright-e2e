@@ -5,11 +5,8 @@ import { expect, test } from '@_src/ui/fixtures/merge.fixture';
 import { authenticateWithToken } from '@_src/ui/utilis/auth';
 
 test.describe('Comments', () => {
-  let username: string;
-
   test.beforeEach(async ({ request, page, homePage }) => {
     const { user } = await createRandomUserViaApi(request);
-    username = user.username;
     await authenticateWithToken(page, user.token);
     await homePage.goto();
   });

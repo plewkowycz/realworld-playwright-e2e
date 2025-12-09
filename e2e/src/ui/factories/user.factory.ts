@@ -13,6 +13,6 @@ export function buildUser(): User {
   return { username, email, password };
 }
 
-export function wrongPasswordFor(_: User): string {
+export function wrongPasswordFor(_user: User): string {
   return `${faker.internet.password({ length: 10 })}!wrong`;
 }

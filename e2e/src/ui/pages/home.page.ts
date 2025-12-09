@@ -1,6 +1,6 @@
 import { HeaderNav } from '@_src/ui/components/header.component';
 
-import { Locator, Page, expect } from '@playwright/test';
+import { Locator, Page } from '@playwright/test';
 
 export class HomePage {
   private readonly page: Page;
