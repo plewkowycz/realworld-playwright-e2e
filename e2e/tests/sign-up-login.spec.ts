@@ -23,18 +23,24 @@ test.describe.serial('Sign-up & Login', () => {
     await expect(homePage.userProfileImage).toBeVisible();
   });
 
-  test.skip('Attempt login with wrong password shows error (expect 401)', async ({
+  // Reason: Backend returns 422 (Unprocessable Entity) for invalid credentials instead of 401.
+  // The RealWorld spec is ambiguous; this backend treats wrong password as a validation error.
+  test('Attempt login with wrong password shows error (expect 422)', async ({
+    request,
     page,
     loginPage,
   }) => {
+    const apiUser = await createRandomUserViaApi(request);
     await loginPage.goto();
     await expect(loginPage.heading).toBeVisible();
+
     const responsePromise = page.waitForResponse((resp) => {
       return resp.url().includes('/api/users/login') && resp.request().method() === 'POST';
     });
-    await loginPage.login(user.email, wrongPasswordFor(user));
+    await loginPage.login(apiUser.credentials.email, wrongPasswordFor(apiUser.credentials));
+
     const response = await responsePromise;
     await expect(loginPage.errorMessages).toBeVisible();
-    expect(response.status()).toBe(401);
+    expect(response.status()).toBe(422);
   });
 });

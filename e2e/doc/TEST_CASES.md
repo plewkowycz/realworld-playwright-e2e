@@ -7,7 +7,7 @@ This document outlines the end-to-end test coverage for the RealWorld app. Core 
 1. Sign‑up & Login
    - Register a new user
    - Log in successfully
-   - Attempt login with a wrong password → expect HTTP 401 / error message
+   - Attempt login with a wrong password → expect HTTP 422 / error message (backend returns 422 Unprocessable Entity for invalid credentials)
 
 2. Write Article
    - Logged-in user creates an article (title, body, tags)
