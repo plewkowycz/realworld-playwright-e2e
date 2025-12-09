@@ -259,16 +259,19 @@ Why this split?
 The CI workflow is defined at the repo root: `.github/workflows/e2e.yml`
 
 **Pipeline stages:**
+
 1. **Code quality** — Prettier + ESLint checks
 2. **Smoke tests** — Runs `tests/smoke.spec.ts` first (fail-fast if app is broken)
 3. **E2E tests** — Runs the main specs: `sign-up-login.spec.ts`, `articles.spec.ts`, `comments.spec.ts`, `follow-feed.spec.ts` with the GitHub reporter
 
 **Features:**
+
 - Playwright browser caching (faster CI runs)
 - Container logs on failure for debugging
 - HTML report + traces uploaded as artifacts (14-day retention)
 
 **Required repository variables** (set in GitHub repo settings):
+
 - `APP_BASE_URL` — e.g., `http://localhost:4200`
 - `APP_API_URL` — e.g., `http://localhost:8000`
 
