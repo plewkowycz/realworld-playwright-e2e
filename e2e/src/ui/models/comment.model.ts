@@ -1,3 +1,3 @@
 export interface CommentFormData {
-	body: string;
+  body: string;
 }

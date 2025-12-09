@@ -16,10 +16,12 @@ This folder contains the Playwright E2E test harness, isolated Node dependencies
 ### Environment
 
 Required:
+
 - `APP_BASE_URL` – Base URL of the running frontend: `http://localhost:4200`
 - `APP_API_URL` – Base URL of the backend API (Django REST): `http://localhost:8000`
 
 These URLs work for both local and dockerized test runs because:
+
 - The app exposes ports `4200` and `8000` to localhost via `app/docker-compose.yml`
 - The test container uses `network_mode: host` to access localhost directly
 
@@ -30,6 +32,7 @@ cp .env.example .env
 ```
 
 Your `.env` should contain:
+
 ```
 APP_BASE_URL=http://localhost:4200
 APP_API_URL=http://localhost:8000
@@ -94,6 +97,7 @@ npm --prefix e2e run test:e2e:docker
 ```
 
 **How it works:**
+
 - The `e2e/docker-compose.yml` defines a `tests` service using the official Playwright image (`mcr.microsoft.com/playwright:v1.57.0-jammy`)
 - The test container uses `network_mode: host` to access `localhost:4200` and `localhost:8000` (the ports exposed by the app containers)
 - This approach avoids Docker internal networking complexity and works reliably across macOS, Windows, and Linux
@@ -102,6 +106,7 @@ npm --prefix e2e run test:e2e:docker
 ### Test scenarios
 
 Currently a basic smoke test is provided:
+
 - `smoke.spec.ts`: navigates to the home page, asserts the page title contains "conduit" and that the "conduit" brand link is visible.
 
 If the upstream landing page content changes, adjust the assertions in `e2e/tests/smoke.spec.ts`.
@@ -140,6 +145,7 @@ The E2E sources live under `e2e/src` and are split by responsibility:
   - `models/` — UI/view-layer models
 
 Why this split?
+
 - **api**: keep API payload building and types isolated so tests can seed/verify data cleanly.
 - **ui**: centralize selectors and user actions in Page Objects to keep specs readable and resilient to UI changes.
 
@@ -161,6 +167,7 @@ Why this split?
 ### CI
 
 This repo includes a GitHub Actions workflow (`.github/workflows/e2e.yml`) that runs headless on Ubuntu:
+
 - Installs Node deps and Playwright browsers with `--with-deps`
 - Clones/updates the app into `app/`
 - Brings up Docker Compose services, waits for the frontend, runs tests
@@ -169,23 +176,25 @@ This repo includes a GitHub Actions workflow (`.github/workflows/e2e.yml`) that 
 ### Linting, formatting, and type-checking
 
 Run ESLint:
+
 ```bash
 npm run lint
 ```
 
 Fix lint issues automatically:
+
 ```bash
 npm run lint:fix
 ```
 
 Format with Prettier:
+
 ```bash
 npm run format
 ```
 
 Type-check TypeScript:
+
 ```bash
 npx tsc -p e2e/tsconfig.json
 ```
-
-

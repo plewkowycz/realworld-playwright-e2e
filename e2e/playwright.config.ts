@@ -1,6 +1,7 @@
-import 'dotenv/config';
 import { APP_BASE_URL } from '@_config/env.config';
+
 import { defineConfig, devices } from '@playwright/test';
+import 'dotenv/config';
 import * as path from 'path';
 
 export const STORAGE_STATE = path.join(__dirname, 'tmp/session.json');
@@ -21,14 +22,12 @@ export default defineConfig({
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
-    actionTimeout: 0
+    actionTimeout: 0,
   },
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] }
-    }
-  ]
+      use: { ...devices['Desktop Chrome'] },
+    },
+  ],
 });
-
-

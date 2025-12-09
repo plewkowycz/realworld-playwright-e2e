@@ -9,10 +9,7 @@
     "ecmaVersion": 2020,
     "sourceType": "module"
   },
-  "plugins": [
-    "@typescript-eslint",
-    "playwright"
-  ],
+  "plugins": ["@typescript-eslint", "playwright"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
@@ -21,25 +18,15 @@
   ],
   "overrides": [
     {
-      "files": [
-        "tests/**/*.ts",
-        "**/*.spec.ts"
-      ],
+      "files": ["tests/**/*.ts", "**/*.spec.ts"],
       "env": {
         "playwright/playwright-test": true
       }
     }
   ],
-  "ignorePatterns": [
-    "node_modules/",
-    "test-results/",
-    "playwright-report/",
-    "playwright/.cache/"
-  ],
+  "ignorePatterns": ["node_modules/", "test-results/", "playwright-report/", "playwright/.cache/"],
   "rules": {
     "playwright/no-focused-tests": "warn",
     "@typescript-eslint/no-explicit-any": "off"
   }
 }
-
-

@@ -1,9 +1,6 @@
 export interface ArticleFormData {
-	title: string;
-	description: string;
-	body: string;
-	tags: string[];
+  title: string;
+  description: string;
+  body: string;
+  tags: string[];
 }
-
-
-

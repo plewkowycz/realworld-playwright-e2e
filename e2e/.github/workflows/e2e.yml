@@ -1,5 +1,5 @@
 name: E2E
-on: 
+on:
   push:
     branches:
       - main
@@ -108,5 +108,3 @@ jobs:
         with:
           name: playwright-report
           path: e2e/playwright-report
-
-

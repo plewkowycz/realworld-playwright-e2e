@@ -29,6 +29,5 @@ This document outlines the end-to-end test coverage for the RealWorld app. Core 
    - Delete the comment → it disappears
 
 ### Notes
+
 - Smoke tests validate the platform is up and responsive before running E2E scenarios.
-
-
