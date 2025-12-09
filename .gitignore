@@ -21,3 +21,4 @@ app/
 
 *.zip
 playwright-traces*
+.cursos/
