@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  tests:
+    image: mcr.microsoft.com/playwright:v1.48.0-jammy
+    working_dir: /work
+    volumes:
+      - ./e2e:/work
+    env_file:
+      - e2e/.env
+    # Ensure host.docker.internal resolves on Linux
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command: >
+      bash -lc '
+      : "${APP_BASE_URL:?APP_BASE_URL is required in e2e/.env}";
+      URL="${APP_BASE_URL}";
+      for i in {1..300}; do
+        if curl -sf "$URL/" >/dev/null; then break; fi
+        sleep 2;
+      done;
+      npm install;
+      npx playwright install --with-deps;
+      npx playwright test;
+      '
+
+

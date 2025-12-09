@@ -1,0 +1,40 @@
+{
+  "name": "realworld-e2e",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "app:clone": "bash -lc '[ -d ../app/.git ] || git clone https://github.com/NemTam/realworld-django-rest-framework-angular ../app'",
+    "app:update": "git -C ../app pull --ff-only",
+    "e2e:up": "docker compose -f ../app/docker-compose.yml up -d",
+    "e2e:wait": "sh -lc \": \\\"\\${APP_BASE_URL:?APP_BASE_URL is required in e2e/.env}\\\"; URL=\\\"\\${APP_BASE_URL}\\\"; until curl -sf \\\"$URL/\\\" >/dev/null; do sleep 1; done\"",
+    "e2e:down": "docker compose -f ../app/docker-compose.yml down -v",
+    "test:e2e": "npm run e2e:up && npx dotenv -e .env -- npm run e2e:wait && npx dotenv -e .env -- playwright test; code=$?; npm run e2e:down; exit $code",
+    "test:e2e:headed": "npm run e2e:up && npx dotenv -e .env -- npm run e2e:wait && npx dotenv -e .env -- playwright test --headed; code=$?; npm run e2e:down; exit $code",
+    "test:e2e:ci": "playwright install --with-deps && npm run test:e2e",
+    "test:e2e:docker": "docker compose -f ../app/docker-compose.yml up -d && docker compose -f ./docker-compose.yml run --rm tests; code=$?; docker compose -f ../app/docker-compose.yml down -v; exit $code",
+    "test:ui": "playwright test --ui",
+    "show-report": "playwright show-report",
+    "lint": "eslint . --ext .ts,.tsx",
+    "lint:fix": "eslint . --ext .ts,.tsx --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.57.0",
+    "@types/node": "^22.19.2",
+    "@typescript-eslint/eslint-plugin": "^8.11.0",
+    "@typescript-eslint/parser": "^8.11.0",
+    "@eslint/js": "^9.14.0",
+    "typescript-eslint": "^8.11.0",
+    "globals": "^15.11.0",
+    "@faker-js/faker": "^9.0.0",
+    "dotenv": "^16.6.1",
+    "dotenv-cli": "^7.4.1",
+    "eslint": "^9.14.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-playwright": "^2.2.2",
+    "eslint-plugin-prettier": "^5.2.1",
+    "prettier": "^3.3.3",
+    "@trivago/prettier-plugin-sort-imports": "^5.2.2"
+  }
+}

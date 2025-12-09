@@ -1,0 +1,12 @@
+# App under test (cloned, not committed)
+app/
+
+# OS/editor noise
+.DS_Store
+*.log
+*.lock
+*.tmp
+
+# Cursor
+.cursor/
+
