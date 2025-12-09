@@ -23,5 +23,5 @@ services:
     command: >
       bash -lc "
       npm ci &&
-      npx playwright test --reporter=list
+      npx playwright test --reporter=list,html
       "

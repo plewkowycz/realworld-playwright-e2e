@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv';
 import * as path from 'path';
 
-dotenv.config({ path: path.resolve(__dirname, '../.env'), override: true, quiet: true });
+dotenv.config({ path: path.resolve(__dirname, '../.env'), override: true });
 
 function requireEnvVariable(envVariableName: string): string {
   const envVariableValue = process.env[envVariableName];

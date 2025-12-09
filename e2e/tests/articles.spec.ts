@@ -1,7 +1,7 @@
 import { createRandomUserViaApi } from '@_src/api/factories/user.factory';
 import { buildArticleData } from '@_src/ui/factories/article.factory';
 import { expect, test } from '@_src/ui/fixtures/merge.fixture';
-import { authenticateWithToken } from '@_src/ui/utilis/auth';
+import { authenticateWithToken } from '@_src/ui/utils/auth';
 
 test.describe('Articles - Create, Edit, Delete', () => {
   let username: string;
@@ -19,9 +19,7 @@ test.describe('Articles - Create, Edit, Delete', () => {
     articlePage,
     profilePage,
   }) => {
-    await expect(
-      homePage.headerNav.brandLink.page().getByRole('link', { name: username }),
-    ).toBeVisible();
+    await expect(page.getByRole('link', { name: username })).toBeVisible();
 
     await homePage.newArticleLink.click();
     await expect(articlePage.editorHeading).toBeVisible();
@@ -63,9 +61,7 @@ test.describe('Articles - Create, Edit, Delete', () => {
     await articlePage.addTags(newTags);
     await articlePage.publish();
 
-    await expect(
-      homePage.headerNav.brandLink.page().getByText('Published successfully!'),
-    ).toBeVisible();
+    await expect(page.getByText('Published successfully!')).toBeVisible();
 
     await homePage.userProfileImage.click();
     await profilePage.articleLinkByTitle(data.title).click();
@@ -80,6 +76,7 @@ test.describe('Articles - Create, Edit, Delete', () => {
   });
 
   test('Create and delete article - disappears from lists', async ({
+    page,
     homePage,
     profilePage,
     articlePage,
@@ -100,8 +97,6 @@ test.describe('Articles - Create, Edit, Delete', () => {
     await expect(profilePage.articleLinkByTitle(data.title)).toHaveCount(0);
 
     await homePage.headerNav.homeLink.click();
-    await expect(
-      homePage.headerNav.brandLink.page().getByRole('link', { name: new RegExp(data.title, 'i') }),
-    ).toHaveCount(0);
+    await expect(page.getByRole('link', { name: new RegExp(data.title, 'i') })).toHaveCount(0);
   });
 });

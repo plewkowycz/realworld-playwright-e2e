@@ -2,14 +2,10 @@ import { APP_BASE_URL } from '@_config/env.config';
 
 import { defineConfig, devices } from '@playwright/test';
 import 'dotenv/config';
-import * as path from 'path';
-
-export const STORAGE_STATE = path.join(__dirname, 'tmp/session.json');
 
 export default defineConfig({
   testDir: './tests',
   outputDir: 'test-results',
-  globalSetup: require.resolve('./config/global.setup.ts'),
   timeout: 60_000,
   expect: { timeout: 10_000 },
   fullyParallel: false,
@@ -22,7 +18,7 @@ export default defineConfig({
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
-    actionTimeout: 0,
+    actionTimeout: 30_000, // 30 seconds max for actions
   },
   projects: [
     {

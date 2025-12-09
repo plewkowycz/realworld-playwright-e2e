@@ -5,7 +5,7 @@ import type {
   ApiUserRegistration,
   ApiUserResponse,
 } from '@_src/api/models/user.api.model';
-import { apiCreateUser, apiLoginUser } from '@_src/api/utilis/users';
+import { apiCreateUser, apiLoginUser } from '@_src/api/utils/users';
 
 import { faker } from '@faker-js/faker';
 import type { APIRequestContext } from '@playwright/test';

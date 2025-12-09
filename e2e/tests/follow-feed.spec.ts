@@ -1,7 +1,7 @@
 import { registerAndLoginRandomUserViaApi } from '@_src/api/factories/user.factory';
 import { buildArticleData } from '@_src/ui/factories/article.factory';
 import { expect, test } from '@_src/ui/fixtures/merge.fixture';
-import { authenticateWithToken, setTokenAndReload } from '@_src/ui/utilis/auth';
+import { authenticateWithToken, setTokenAndReload } from '@_src/ui/utils/auth';
 
 test.describe('Follow Feed', () => {
   test('Article from followed user appears in Your Feed', async ({

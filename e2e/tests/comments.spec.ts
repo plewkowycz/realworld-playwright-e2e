@@ -2,7 +2,7 @@ import { createRandomUserViaApi } from '@_src/api/factories/user.factory';
 import { buildArticleData } from '@_src/ui/factories/article.factory';
 import { buildCommentText } from '@_src/ui/factories/comment.factory';
 import { expect, test } from '@_src/ui/fixtures/merge.fixture';
-import { authenticateWithToken } from '@_src/ui/utilis/auth';
+import { authenticateWithToken } from '@_src/ui/utils/auth';
 
 test.describe('Comments', () => {
   test.beforeEach(async ({ request, page, homePage }) => {

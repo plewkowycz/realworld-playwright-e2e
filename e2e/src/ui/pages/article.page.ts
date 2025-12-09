@@ -74,7 +74,8 @@ export class ArticlePage {
   async addTags(tags: string[]): Promise<void> {
     for (const tag of tags) {
       await this.tagsInput.fill(tag);
-      await this.tagsInput.press('Enter');
+      // Angular's (change) event fires on blur, not on Enter
+      await this.tagsInput.blur();
       await this.page.locator('.tag-pill').filter({ hasText: tag }).waitFor({ state: 'visible' });
     }
   }

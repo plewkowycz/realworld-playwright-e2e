@@ -12,7 +12,8 @@ export class ProfilePage {
   }
 
   articleLinkByTitle(title: string): Locator {
-    return this.page.getByRole('link', { name: new RegExp(title, 'i') });
+    const escaped = title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return this.page.getByRole('link', { name: new RegExp(escaped, 'i') });
   }
 
   articlesTabByUsername(username: string): Locator {
