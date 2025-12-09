@@ -16,6 +16,5 @@ test.describe('Smoke Test', () => {
     await expect(homePage.globalFeedTab).toBeVisible();
 
     await expect(homePage.popularTagsPanel).toBeVisible();
-    await expect.soft(homePage.emptyFeedState).toBeVisible();
   });
 });

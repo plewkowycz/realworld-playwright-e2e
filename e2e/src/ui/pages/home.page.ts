@@ -8,7 +8,6 @@ export class HomePage {
 	readonly heroSubheading: Locator;
 	readonly globalFeedTab: Locator;
 	readonly popularTagsPanel: Locator;
-	readonly emptyFeedState: Locator;	
 	readonly newArticleLink: Locator;
 	readonly settingsLink: Locator;
 	readonly userProfileImage: Locator;
@@ -20,7 +19,6 @@ export class HomePage {
 		this.heroSubheading = this.page.getByText(/A place to share your/i);
 		this.globalFeedTab = this.page.getByText('Global Feed');
 		this.popularTagsPanel = this.page.getByText('Popular Tags');
-		this.emptyFeedState = this.page.getByText('No articles are here... yet.');
 		this.newArticleLink = this.page.getByRole('link', { name: '   New Article' });
 		this.settingsLink = this.page.getByRole('link', { name: '   Settings' });
 		this.userProfileImage = this.page.getByRole('link', { name: 'User profile image' });
