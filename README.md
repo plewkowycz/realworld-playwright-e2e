@@ -76,16 +76,6 @@ Available variables:
 - `APP_BASE_URL` (required; use `http://localhost:4200` for both local and dockerized tests)
 - `APP_API_URL` (required; use `http://localhost:8000` for both local and dockerized tests)
 - Credentials (configure in `e2e/.env`):
-  ```
-  # Demo credentials for registration (optional; for future tests)
-  E2E_USERNAME_FOR_REGISTRATION=
-  E2E_EMAIL_FOR_REGISTRATION=
-  E2E_PASSWORD_FOR_REGISTRATION=
-
-  # Demo credentials for login (optional; for future tests)
-  E2E_EMAIL_FOR_LOGIN=
-  E2E_PASSWORD_FOR_LOGIN=
-  ```
 
 ### 4) Run tests locally (headless)
 
