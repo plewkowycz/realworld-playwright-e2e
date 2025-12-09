@@ -104,6 +104,79 @@ npm --prefix e2e run test:e2e:docker
 - This approach avoids Docker internal networking complexity and works reliably across macOS, Windows, and Linux
 - Recommended Playwright flags (`--ipc=host`, `--init`) are configured for stability
 
+### Viewing test results
+
+After running tests, Playwright generates several artifacts to help debug failures:
+
+| Artifact | Location | When Generated |
+|----------|----------|----------------|
+| HTML Report | `playwright-report/` | Always |
+| Screenshots | `test-results/<test-name>/` | On failure |
+| Videos | `test-results/<test-name>/` | On failure |
+| Traces | `test-results/<test-name>/` | On failure |
+
+**Step 1: Open the HTML report**
+
+```bash
+# From the e2e/ directory
+npx playwright show-report
+```
+
+This opens an interactive HTML report in your browser showing:
+- Test results summary (passed/failed/skipped)
+- Each test with its steps, duration, and errors
+- Links to screenshots, videos, and traces for failed tests
+
+**Step 2: View traces for failed tests**
+
+Traces provide a detailed timeline of test execution including:
+- DOM snapshots at each action
+- Network requests
+- Console logs
+- Action timeline
+
+To view a trace:
+
+```bash
+# Option A: From the HTML report
+# Click on a failed test → click "Traces" tab → click the trace file
+
+# Option B: Directly from command line
+npx playwright show-trace test-results/<test-folder>/trace.zip
+```
+
+**Step 3: View screenshots and videos**
+
+Failed test screenshots and videos are in `test-results/<test-name>/`:
+
+```bash
+# List artifacts for a specific test
+ls -la test-results/
+
+# Open a screenshot (macOS)
+open test-results/<test-folder>/test-failed-1.png
+
+# Play a video (macOS)
+open test-results/<test-folder>/video.webm
+```
+
+**Accessing results from Docker runs**
+
+When running tests via Docker (`npm run test:e2e:docker`), artifacts are written to the mounted `e2e/` directory:
+
+```bash
+# After docker compose run completes:
+ls -la e2e/playwright-report/   # HTML report
+ls -la e2e/test-results/        # Screenshots, videos, traces
+
+# Open the report
+cd e2e && npx playwright show-report
+```
+
+**CI artifacts**
+
+On GitHub Actions, the HTML report and traces are uploaded as artifacts. Download them from the workflow run's "Artifacts" section.
+
 ### Test scenarios
 
 Currently a basic smoke test is provided:
@@ -137,7 +210,7 @@ The E2E sources live under `e2e/src` and are split by responsibility:
 - `e2e/src/api/` — API-layer helpers and types used by tests
   - `factories/` — data factories for API payloads (e.g., `user.factory.ts`)
   - `models/` — API models/types (e.g., `user.api.model.ts`)
-  - `utilis/` — small API utilities (e.g., `users.ts`)
+  - `utils/` — small API utilities (e.g., `users.ts`)
 - `e2e/src/ui/` — UI-layer (Page Objects + supporting test helpers)
   - `pages/` — Page Objects for major screens (e.g., `home.page.ts`, `login.page.ts`, `article.page.ts`, `profile.page.ts`, `register.page.ts`)
   - `components/` — reusable UI fragments used by pages (e.g., `header.component.ts`)

@@ -15,7 +15,7 @@ export default defineConfig({
   reporter: [['html', { outputFolder: 'playwright-report', open: 'never' }]],
   use: {
     baseURL: APP_BASE_URL,
-    trace: 'on-first-retry',
+    trace: 'retain-on-failure', // Capture trace for failing tests
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
     actionTimeout: 30_000, // 30 seconds max for actions
