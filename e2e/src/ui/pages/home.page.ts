@@ -31,7 +31,7 @@ export class HomePage {
 	}
 
 	articleLinkByTitle(title: string): Locator {
-		const escaped = title.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&').replace(/]/g, '\\\\]');
+		const escaped = title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 		return this.page.getByRole('link', { name: new RegExp(escaped, 'i') });
 	}
 }

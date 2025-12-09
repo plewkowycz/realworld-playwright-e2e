@@ -11,7 +11,7 @@ export default defineConfig({
   globalSetup: require.resolve('./config/global.setup.ts'),
   timeout: 60_000,
   expect: { timeout: 10_000 },
-  fullyParallel: true,
+  fullyParallel: false,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,

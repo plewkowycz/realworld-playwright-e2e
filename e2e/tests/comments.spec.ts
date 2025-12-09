@@ -8,7 +8,6 @@ test.describe('Comments', () => {
 	let username: string;
 
 	test.beforeEach(async ({ request, page, homePage }) => {
-		// Create a fresh user and authenticate UI with the token
 		const { user } = await createRandomUserViaApi(request);
 		username = user.username;
 		await authenticateWithToken(page, user.token);
@@ -16,28 +15,23 @@ test.describe('Comments', () => {
 	});
 
 	test('Add a comment → it displays', async ({ page, homePage, articlePage, profilePage }) => {
-		// Create a new article
 		await homePage.newArticleLink.click();
 		await expect(articlePage.editorHeading).toBeVisible();
 		const data = buildArticleData();
 		await articlePage.fillForm(data);
 		await articlePage.publish();
-		// Editor shows success toast after publish
 		await expect(page.getByText('Published successfully!')).toBeVisible();
 
-		// Open the newly created article from the profile
 		await homePage.userProfileImage.click();
 		await profilePage.articleLinkByTitle(data.title).click();
 		await expect(articlePage.editButton).toBeVisible();
 
-		// Add a comment and verify it appears
 		const commentText = buildCommentText();
 		await articlePage.addComment(commentText);
 		await expect(articlePage.commentByText(commentText)).toBeVisible();
 	});
 
 	test('Delete the comment → it disappears', async ({ page, homePage, articlePage, profilePage }) => {
-		// Create a new article
 		await homePage.newArticleLink.click();
 		await expect(articlePage.editorHeading).toBeVisible();
 		const data = buildArticleData();
@@ -45,12 +39,10 @@ test.describe('Comments', () => {
 		await articlePage.publish();
 		await expect(page.getByText('Published successfully!')).toBeVisible();
 
-		// Open the article
 		await homePage.userProfileImage.click();
 		await profilePage.articleLinkByTitle(data.title).click();
 		await expect(articlePage.editButton).toBeVisible();
 
-		// Add and then delete a comment
 		const commentText = buildCommentText();
 		await articlePage.addComment(commentText);
 		await expect(articlePage.commentByText(commentText)).toBeVisible();

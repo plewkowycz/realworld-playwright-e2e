@@ -32,9 +32,6 @@ test.describe.serial('Sign-up & Login', () => {
 		await loginPage.login(user.email, wrongPasswordFor(user));
 		const response = await responsePromise;
 		await expect(loginPage.errorMessages).toBeVisible();
-		// Expected 401, but got 422
 		expect(response.status()).toBe(401);
 	});
 });
-
-

@@ -9,10 +9,11 @@ export class HeaderNav {
 
 	constructor(page: Page) {
 		this.page = page;
-		this.brandLink = this.page.getByRole('navigation').getByRole('link', { name: 'conduit' });
-		this.homeLink = this.page.getByRole('link', { name: 'Home' });
-		this.signInLink = this.page.getByRole('link', { name: 'Sign in' });
-		this.signUpLink = this.page.getByRole('link', { name: 'Sign up' });
+		const nav = this.page.getByRole('navigation');
+		this.brandLink = nav.getByRole('link', { name: 'conduit' });
+		this.homeLink = nav.getByRole('link', { name: 'Home' });
+		this.signInLink = nav.getByRole('link', { name: 'Sign in' });
+		this.signUpLink = nav.getByRole('link', { name: 'Sign up' });
 	}
 }
 
