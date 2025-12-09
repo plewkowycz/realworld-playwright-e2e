@@ -19,12 +19,19 @@ Required:
 - `APP_BASE_URL` – Base URL of the running frontend.
   - Local host runs: `http://localhost:4200`
   - When running dockerized tests on macOS/Windows/Linux: `http://host.docker.internal:4200`
+- `APP_API_URL` – Base URL of the backend API (Django REST).
+  - Local host runs: `http://localhost:8000`
+  - When running dockerized tests on macOS/Windows/Linux: `http://host.docker.internal:8000`
 
 Create your `.env` from the example:
 
 ```bash
 cp .env.example .env
 ```
+
+Backend login error code note:
+
+- The assessment requires that a wrong‑password login returns HTTP 401 (Unauthorized). The current upstream backend returns HTTP 422 (Unprocessable Entity) for invalid credentials. Tests assert the visible error message in the UI; if strict HTTP‑status validation is desired, account for this discrepancy (tolerate 401 or 422) or adjust backend behavior.
 
 ### Scripts
 

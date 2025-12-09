@@ -10,3 +10,12 @@ app/
 # Cursor
 .cursor/
 
+# Environment files (keep examples)
+.env
+.env.*
+!.env.example
+
+# Editor/IDE settings
+.vscode/
+.idea/
+

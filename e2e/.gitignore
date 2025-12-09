@@ -3,6 +3,11 @@ node_modules/
 /playwright-report/
 /playwright/.cache/
 .env
+.env.*
+!.env.example
 tmp/*
 !tmp/.gitkeep
+
+# Playwright merged blob reports (CI)
+blob-report/
 

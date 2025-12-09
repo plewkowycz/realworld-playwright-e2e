@@ -7,6 +7,7 @@ export class HomePage {
 	readonly heroHeading: Locator;
 	readonly heroSubheading: Locator;
 	readonly globalFeedTab: Locator;
+	readonly yourFeedTab: Locator;
 	readonly popularTagsPanel: Locator;
 	readonly newArticleLink: Locator;
 	readonly settingsLink: Locator;
@@ -18,6 +19,7 @@ export class HomePage {
 		this.heroHeading = this.page.getByRole('heading', { name: 'conduit' });
 		this.heroSubheading = this.page.getByText(/A place to share your/i);
 		this.globalFeedTab = this.page.getByText('Global Feed');
+		this.yourFeedTab = this.page.getByText(/Your Feed|My Feed/i);
 		this.popularTagsPanel = this.page.getByText('Popular Tags');
 		this.newArticleLink = this.page.getByRole('link', { name: '   New Article' });
 		this.settingsLink = this.page.getByRole('link', { name: '   Settings' });
@@ -26,6 +28,11 @@ export class HomePage {
 
 	async goto(): Promise<void> {
 		await this.page.goto('/#/');
+	}
+
+	articleLinkByTitle(title: string): Locator {
+		const escaped = title.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&').replace(/]/g, '\\\\]');
+		return this.page.getByRole('link', { name: new RegExp(escaped, 'i') });
 	}
 }
 
