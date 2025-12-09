@@ -13,6 +13,7 @@ export function buildUser(): User {
   return { username, email, password };
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function wrongPasswordFor(_user: User): string {
   return `${faker.internet.password({ length: 10 })}!wrong`;
 }
