@@ -22,9 +22,12 @@ export async function apiCreateUser(
 
   if (!response.ok()) {
     const bodyText = await response.text();
-    throw new Error(
-      `apiCreateUser failed: ${response.status()} ${response.statusText()} - ${bodyText}`,
-    );
+    console.error('[apiCreateUser] Response details:', {
+      status: response.status(),
+      statusText: response.statusText(),
+      body: bodyText,
+    });
+    throw new Error(`apiCreateUser failed: ${response.status()}`);
   }
   expect(response.status()).toBe(201);
   return (await response.json()) as ApiUserResponse;
@@ -45,9 +48,12 @@ export async function apiLoginUser(
 
   if (!response.ok()) {
     const bodyText = await response.text();
-    throw new Error(
-      `apiLoginUser failed: ${response.status()} ${response.statusText()} - ${bodyText}`,
-    );
+    console.error('[apiLoginUser] Response details:', {
+      status: response.status(),
+      statusText: response.statusText(),
+      body: bodyText,
+    });
+    throw new Error(`apiLoginUser failed: ${response.status()}`);
   }
   expect(response.status()).toBe(200);
   return (await response.json()) as ApiUserResponse;
