@@ -22,6 +22,7 @@ export async function apiCreateUser(
 
   if (!response.ok()) {
     const bodyText = await response.text();
+    // eslint-disable-next-line no-console -- Intentional error logging for test debugging
     console.error('[apiCreateUser] Response details:', {
       status: response.status(),
       statusText: response.statusText(),
@@ -48,6 +49,7 @@ export async function apiLoginUser(
 
   if (!response.ok()) {
     const bodyText = await response.text();
+    // eslint-disable-next-line no-console -- Intentional error logging for test debugging
     console.error('[apiLoginUser] Response details:', {
       status: response.status(),
       statusText: response.statusText(),

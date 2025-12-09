@@ -22,8 +22,8 @@ export class HomePage {
     this.globalFeedTab = this.page.getByText('Global Feed');
     this.yourFeedTab = this.page.getByText(/Your Feed|My Feed/i);
     this.popularTagsPanel = this.page.getByText('Popular Tags');
-    this.newArticleLink = this.page.getByRole('link', { name: '   New Article' });
-    this.settingsLink = this.page.getByRole('link', { name: '   Settings' });
+    this.newArticleLink = this.page.getByRole('link', { name: '   New Article' });
+    this.settingsLink = this.page.getByRole('link', { name: '   Settings' });
     this.userProfileImage = this.page.getByRole('link', { name: 'User profile image' });
   }
 

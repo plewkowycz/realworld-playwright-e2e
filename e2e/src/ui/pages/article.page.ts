@@ -72,11 +72,15 @@ export class ArticlePage {
   }
 
   async addTags(tags: string[]): Promise<void> {
+    // Get the tag-list container that's sibling to the tags input (within same fieldset)
+    const tagsContainer = this.tagsInput.locator('..').locator('.tag-list');
+
     for (const tag of tags) {
       await this.tagsInput.fill(tag);
       // Angular's (change) event fires on blur, not on Enter
       await this.tagsInput.blur();
-      await this.page.locator('.tag-pill').filter({ hasText: tag }).waitFor({ state: 'visible' });
+      // Wait for tag pill to appear in the container (hasText handles whitespace)
+      await tagsContainer.locator('.tag-pill', { hasText: tag }).waitFor({ state: 'visible' });
     }
   }
 

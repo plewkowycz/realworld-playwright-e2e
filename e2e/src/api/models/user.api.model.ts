@@ -10,7 +10,7 @@ export interface ApiUserResponse {
   user: {
     email: string;
     username: string;
-    bio: string | null | '';
+    bio: string | null;
     image: string | null;
     token: string;
   };

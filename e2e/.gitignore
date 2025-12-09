@@ -11,3 +11,14 @@ tmp/*
 # Playwright merged blob reports (CI)
 blob-report/
 
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+*.swp
+
+# Logs
+*.log
+npm-debug.log*
