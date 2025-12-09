@@ -1,29 +1,60 @@
 import { APP_BASE_URL } from '@_config/env.config';
 
 import { defineConfig, devices } from '@playwright/test';
-import 'dotenv/config';
+
+const isCI = !!process.env.CI;
 
 export default defineConfig({
   testDir: './tests',
   outputDir: 'test-results',
+
+  /* Test timeouts */
   timeout: 60_000,
   expect: { timeout: 10_000 },
+
+  /* Run tests sequentially - required due to shared database state */
   fullyParallel: false,
-  forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
-  reporter: [['html', { outputFolder: 'playwright-report', open: 'never' }]],
+
+  /* Fail the build on CI if you accidentally left test.only in the source code */
+  forbidOnly: isCI,
+
+  /* Retry failed tests in CI for stability */
+  retries: isCI ? 2 : 0,
+
+  /* Single worker to prevent database conflicts */
+  workers: 1,
+
+  /* Reporter configuration */
+  reporter: isCI
+    ? [['list'], ['html', { outputFolder: 'playwright-report', open: 'never' }]]
+    : [['html', { outputFolder: 'playwright-report', open: 'never' }]],
+
   use: {
     baseURL: APP_BASE_URL,
-    trace: 'retain-on-failure', // Capture trace for failing tests
+
+    /* Timeouts */
+    actionTimeout: 30_000,
+    navigationTimeout: 30_000,
+
+    /* Artifacts - retain on failure for debugging */
+    trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
-    actionTimeout: 30_000, // 30 seconds max for actions
   },
+
   projects: [
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
+    // Uncomment to enable cross-browser testing
+    // {
+    //   name: 'firefox',
+    //   use: { ...devices['Desktop Firefox'] },
+    // },
+    // {
+    //   name: 'webkit',
+    //   use: { ...devices['Desktop Safari'] },
+    // },
   ],
 });

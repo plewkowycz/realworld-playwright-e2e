@@ -104,9 +104,13 @@ jobs:
       - name: Show container status
         run: docker compose -f app/docker-compose.yml ps
 
+      - name: Run smoke tests
+        working-directory: e2e
+        run: npx playwright test tests/smoke.spec.ts --reporter=github
+
       - name: Run Playwright tests
         working-directory: e2e
-        run: npx playwright test --reporter=github --trace=retain-on-failure
+        run: npx playwright test tests/sign-up-login.spec.ts tests/articles.spec.ts tests/comments.spec.ts tests/follow-feed.spec.ts --reporter=github
 
       - name: Show logs on failure
         if: failure()

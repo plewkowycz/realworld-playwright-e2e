@@ -1,14 +1,13 @@
 # App under test (cloned, not committed)
 app/
 
-# OS/editor noise
+# OS files
 .DS_Store
-*.log
-*.lock
-*.tmp
+Thumbs.db
 
-# Cursor
-.cursor/
+# Logs and temp files
+*.log
+*.tmp
 
 # Environment files (keep examples)
 .env
@@ -16,9 +15,11 @@ app/
 !.env.example
 
 # Editor/IDE settings
+.cursor/
 .vscode/
 .idea/
+*.swp
 
+# Build artifacts
 *.zip
-playwright-traces*
-.cursos/
+playwright-traces/

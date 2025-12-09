@@ -12,6 +12,7 @@ This folder contains the Playwright E2E test harness, isolated Node dependencies
 
 - Smoke test to ensure the platform is ready before executing full E2E runs.
 - Core user journeys + two additional scenarios (Edit/Delete Article, Comments). Details in `e2e/doc/TEST_CASES.md`.
+- Code quality gates for the E2E suite using **ESLint** (linting), **Prettier** (formatting), and **TypeScript** (type‑checking).
 
 ### Environment
 
@@ -54,6 +55,11 @@ Backend login error code note:
 - `test:e2e:headed` – Same as above, but run tests headed.
 - `test:e2e:ci` – Install Playwright deps on CI then run `test:e2e`.
 - `test:e2e:docker` – Start the app, run tests inside the official Playwright container, then tear down.
+- `lint` – Run ESLint over the E2E sources.
+- `lint:fix` – Run ESLint with `--fix` to auto‑correct simple issues.
+- `format` – Format the E2E codebase with Prettier.
+- `format:check` – Check formatting without writing changes.
+- `typecheck` – Run TypeScript type checking only (no emit).
 
 ### Run tests locally (headless)
 
@@ -66,6 +72,14 @@ cp .env.example .env
 # Set APP_BASE_URL in .env
 npm run test:e2e
 ```
+
+Before running tests in CI, the pipeline also runs:
+
+- `npm run lint` (ESLint)
+- `npm run format:check` (Prettier)
+- `npm run typecheck` (TypeScript)
+
+See the **Linting, formatting, and type-checking** section below for full details and local commands.
 
 Headed:
 
@@ -242,12 +256,45 @@ Why this split?
 
 ### CI
 
-This repo includes a GitHub Actions workflow (`.github/workflows/e2e.yml`) that runs headless on Ubuntu:
+The CI workflow is defined at the repo root: `.github/workflows/e2e.yml`
 
-- Installs Node deps and Playwright browsers with `--with-deps`
-- Clones/updates the app into `app/`
-- Brings up Docker Compose services, waits for the frontend, runs tests
-- Uploads the Playwright report as an artifact
+**Pipeline stages:**
+1. **Code quality** — Prettier + ESLint checks
+2. **Smoke tests** — Runs `tests/smoke.spec.ts` first (fail-fast if app is broken)
+3. **E2E tests** — Runs the main specs: `sign-up-login.spec.ts`, `articles.spec.ts`, `comments.spec.ts`, `follow-feed.spec.ts` with the GitHub reporter
+
+**Features:**
+- Playwright browser caching (faster CI runs)
+- Container logs on failure for debugging
+- HTML report + traces uploaded as artifacts (14-day retention)
+
+**Required repository variables** (set in GitHub repo settings):
+- `APP_BASE_URL` — e.g., `http://localhost:4200`
+- `APP_API_URL` — e.g., `http://localhost:8000`
+
+See the [root README](../README.md#ci-github-actions) for full CI documentation.
+
+### Future work
+
+- **Reduce flakiness (especially tag editing):**  
+  The test `should persist body and tag edits after publishing` in `articles.spec.ts` can be stress‑run locally to diagnose flakiness, for example:
+
+  ```bash
+  cd e2e
+  npx playwright test tests/articles.spec.ts -g "should persist body and tag edits after publishing" --repeat-each=50
+  ```
+
+- **Balance UI vs API coverage:**  
+  Some flows (e.g., user registration/login) are partially short‑circuited via API helpers like `createRandomUserViaApi` to keep E2E runs fast and focused on UI behavior. In the future, consider adding more dedicated API‑level tests (or extending backend test coverage) to validate those endpoints separately while keeping UI specs lean.
+
+- **Cross‑browser and viewport coverage:**  
+  The current Playwright config runs Chromium desktop only. Future improvements could enable additional projects in `playwright.config.ts` (Firefox/WebKit or mobile viewports) and run them via:
+
+  ```bash
+  cd e2e
+  npx playwright test --project=firefox
+  npx playwright test --project="Desktop Safari"
+  ```
 
 ### Linting, formatting, and type-checking
 

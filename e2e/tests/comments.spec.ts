@@ -5,50 +5,47 @@ import { expect, test } from '@_src/ui/fixtures/merge.fixture';
 import { authenticateWithToken } from '@_src/ui/utils/auth';
 
 test.describe('Comments', () => {
-  test.beforeEach(async ({ request, page, homePage }) => {
+  test.beforeEach(async ({ request, page, homePage, articlePage, profilePage }) => {
+    // Arrange: create user, authenticate, and create an article to comment on
     const { user } = await createRandomUserViaApi(request);
     await authenticateWithToken(page, user.token);
     await homePage.goto();
-  });
 
-  test('Add a comment → it displays', async ({ page, homePage, articlePage, profilePage }) => {
+    // Create article for comments
+    const data = buildArticleData();
     await homePage.newArticleLink.click();
     await expect(articlePage.editorHeading).toBeVisible();
-    const data = buildArticleData();
     await articlePage.fillForm(data);
     await articlePage.publish();
     await expect(page.getByText('Published successfully!')).toBeVisible();
 
+    // Navigate to the article
     await homePage.userProfileImage.click();
     await profilePage.articleLinkByTitle(data.title).click();
     await expect(articlePage.editButton).toBeVisible();
+  });
 
+  test('should display newly added comment on article', async ({ articlePage }) => {
+    // Arrange
     const commentText = buildCommentText();
+
+    // Act
     await articlePage.addComment(commentText);
+
+    // Assert
     await expect(articlePage.commentByText(commentText)).toBeVisible();
   });
 
-  test('Delete the comment → it disappears', async ({
-    page,
-    homePage,
-    articlePage,
-    profilePage,
-  }) => {
-    await homePage.newArticleLink.click();
-    await expect(articlePage.editorHeading).toBeVisible();
-    const data = buildArticleData();
-    await articlePage.fillForm(data);
-    await articlePage.publish();
-    await expect(page.getByText('Published successfully!')).toBeVisible();
-
-    await homePage.userProfileImage.click();
-    await profilePage.articleLinkByTitle(data.title).click();
-    await expect(articlePage.editButton).toBeVisible();
-
+  test('should remove comment after deletion', async ({ articlePage }) => {
+    // Arrange: add a comment first
     const commentText = buildCommentText();
     await articlePage.addComment(commentText);
     await expect(articlePage.commentByText(commentText)).toBeVisible();
+
+    // Act
     await articlePage.deleteCommentByText(commentText);
+
+    // Assert
     await expect(articlePage.commentByText(commentText)).toHaveCount(0);
   });
 });

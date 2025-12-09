@@ -3,12 +3,12 @@ import * as path from 'path';
 
 dotenv.config({ path: path.resolve(__dirname, '../.env'), override: true });
 
-function requireEnvVariable(envVariableName: string): string {
-  const envVariableValue = process.env[envVariableName];
-  if (envVariableValue === undefined) {
-    throw new Error(`Environment variable ${envVariableName} is not set.`);
+function requireEnvVariable(name: string): string {
+  const value = process.env[name];
+  if (value === undefined || value === '') {
+    throw new Error(`Environment variable ${name} is not set or empty.`);
   }
-  return envVariableValue;
+  return value;
 }
 
 export const APP_BASE_URL = requireEnvVariable('APP_BASE_URL');
